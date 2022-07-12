@@ -3,18 +3,31 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegistrationRequest;
+use Illuminate\Routing\Redirector;
 
 class AuthController extends Controller
 {
-    public function show_login_form()
+    /**
+     * @return Application|Factory|View
+     */
+    public function showLoginForm(): View
     {
         return view('auth.login');
     }
 
-    public function login(LoginRequest $req)
+    /**
+     * @param LoginRequest $req
+     *
+     * @return Application|RedirectResponse|Redirector
+     */
+    public function login(LoginRequest $req): Redirector
     {
         $data = [
             'login' => $req->login,
@@ -23,7 +36,6 @@ class AuthController extends Controller
 
         if (auth('web')->attempt($data)) {
 
-
             return redirect(route('show_home'));
         }
 
@@ -31,20 +43,30 @@ class AuthController extends Controller
          пользователь ввел неверный пароль']);
     }
 
-    public function logout()
+    /**
+     * @return Application|RedirectResponse|Redirector
+     */
+    public function logout(): Redirector
     {
-
         auth('web')->logout();
 
         return redirect(route('login'));
     }
 
-    public function show_register_form()
+    /**
+     * @return Application|Factory|View
+     */
+    public function showRegisterForm(): View
     {
         return view('auth.register');
     }
 
-    public function register(RegistrationRequest $req)
+    /**
+     * @param RegistrationRequest $req
+     *
+     * @return Application|RedirectResponse|Redirector
+     */
+    public function register(RegistrationRequest $req): Redirector
     {
         $user = User::create([
             'surname' => $req->surname,

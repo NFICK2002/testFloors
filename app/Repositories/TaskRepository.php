@@ -3,7 +3,9 @@
 namespace App\Repositories;
 
 use App\Models\Task;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 
 class TaskRepository
 {
@@ -11,7 +13,7 @@ class TaskRepository
     /**
      * @param mixed $id
      *
-     * @return Task|\Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Builder[]|Collection|\Illuminate\Database\Eloquent\Model
+     * @return Task|Builder|Builder[]|Collection|Model
      */
     public function findById($id): Task
     {
@@ -22,7 +24,7 @@ class TaskRepository
      * @param int $user_id
      *
      *
-     * @return \Illuminate\Database\Eloquent\Builder[]|Collection
+     * @return Builder[]|Collection
      */
     public function getTasksByDesc(int $user_id): Collection
     {
@@ -36,7 +38,7 @@ class TaskRepository
     /**
      * @param int $user_id
      *
-     * @return \Illuminate\Database\Eloquent\Builder[]|Collection
+     * @return Builder[]|Collection
      */
     public function getTasksToday(int $user_id): Collection
     {
@@ -56,7 +58,7 @@ class TaskRepository
     /**
      * @param int $user_id
      *
-     * @return \Illuminate\Database\Eloquent\Builder[]|Collection
+     * @return Builder[]|Collection
      */
     public function getTasksOnWeek(int $user_id): Collection
     {
@@ -76,7 +78,7 @@ class TaskRepository
     /**
      * @param int $user_id
      *
-     * @return \Illuminate\Database\Eloquent\Builder[]|Collection
+     * @return Builder[]|Collection
      */
     public function getTasksMoreWeek(int $user_id): Collection
     {
@@ -97,7 +99,7 @@ class TaskRepository
      * @param int $user_id
      * @param int $responsible_id
      *
-     * @return \Illuminate\Database\Eloquent\Builder[]|Collection
+     * @return Builder[]|Collection
      */
     public function getTasksResponsible(int $user_id, int $responsible_id): Collection
     {

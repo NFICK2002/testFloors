@@ -6,16 +6,21 @@ use App\Http\Requests\TaskRequest;
 use App\Models\Task;
 use App\Models\User;
 use App\Repositories\TaskRepository;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Redirector;
 
 class TaskController extends Controller
 {
     /**
      * @param TaskRepository $repository
      *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @return Application|Factory|View
      */
-    public function all_task(TaskRepository $repository)
+    public function allTask(TaskRepository $repository): View
     {
         $my_id = auth('web')->user()->id;
         $boss_id = auth()->user()->boss_id;
@@ -29,7 +34,7 @@ class TaskController extends Controller
         }
 
         return view('tasks', [
-            'all_task' => $all_my_task,
+            'allTask' => $all_my_task,
             'all_users' => $all_users,
             'resp_people' => $responsible_people,
         ]);
@@ -40,16 +45,16 @@ class TaskController extends Controller
      * @param TaskRepository $repository
      * @param Request $req
      *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @return Application|Factory|View
      */
-    public function show_filter_task(TaskRepository $repository, Request $req)
+    public function showFilterTask(TaskRepository $repository, Request $req): View
     {
         $my_id = auth('web')->user()->id;
 
         $responsible_people = null;
         $boss_id = auth()->user()->boss_id;
 
-        $all_task = $repository->getTasksByDesc($my_id);
+        $allTask = $repository->getTasksByDesc($my_id);
 
         $all_users = User::all();
 
@@ -61,18 +66,18 @@ class TaskController extends Controller
         $value = $req->input('filter');
         switch ($value) {
             case 'tasks_today' :
-                $all_task = $repository->getTasksToday($my_id);
+                $allTask = $repository->getTasksToday($my_id);
                 break;
             case 'tasks_week':
-                $all_task = $repository->getTasksOnWeek($my_id);
+                $allTask = $repository->getTasksOnWeek($my_id);
                 break;
             case 'tasks_more_week':
-                $all_task = $repository->getTasksMoreWeek($my_id);
+                $allTask = $repository->getTasksMoreWeek($my_id);
                 break;
 
             default:
                 return view('tasks', [
-                    'all_task' => $all_task,
+                    'allTask' => $allTask,
                     'all_users' => $all_users,
                     'resp_people' => $responsible_people,
                 ]);
@@ -80,7 +85,7 @@ class TaskController extends Controller
         }
 
         return view('tasks', [
-            'all_task' => $all_task,
+            'allTask' => $allTask,
             'all_users' => $all_users,
             'resp_people' => $responsible_people
         ]);
@@ -91,16 +96,16 @@ class TaskController extends Controller
      * @param TaskRepository $repository
      * @param Request $req
      *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @return Application|Factory|View
      */
-    public function show_filter_task_responsible(TaskRepository $repository, Request $req)
+    public function showFilterTaskResponsible(TaskRepository $repository, Request $req): View
     {
         $my_id = auth('web')->user()->id;
         $responsible_id = $req->input('filter_responsible');
         $responsible_people = null;
         $boss_id = auth()->user()->boss_id;
 
-        $all_task = $repository->getTasksByDesc($my_id);
+        $allTask = $repository->getTasksByDesc($my_id);
 
 
         $all_users = User::all();
@@ -111,12 +116,12 @@ class TaskController extends Controller
 
 
         if (isset($responsible_id)) {
-            $all_task = $repository->getTasksResponsible($my_id, $responsible_id);
+            $allTask = $repository->getTasksResponsible($my_id, $responsible_id);
         }
 
 
         return view('tasks', [
-            'all_task' => $all_task,
+            'allTask' => $allTask,
             'all_users' => $all_users,
             'resp_people' => $responsible_people
         ]);
@@ -126,9 +131,9 @@ class TaskController extends Controller
     /**
      * @param TaskRequest $req
      *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return Application|RedirectResponse|Redirector
      */
-    public function add_task_submit(TaskRequest $req)
+    public function addTaskSubmit(TaskRequest $req): Redirector
     {
 
         $task = Task::create([
@@ -145,11 +150,12 @@ class TaskController extends Controller
 
 
     /**
+     * @param TaskRepository $repository
      * @param Request $req
      *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return Application|RedirectResponse|Redirector
      */
-    public function change_task(TaskRepository $repository, Request $req)
+    public function changeTask(TaskRepository $repository, Request $req): Redirector
     {
         $task = $repository->findById($req->id_course);
         $task->title = $req->title ?? $task->title;
