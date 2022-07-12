@@ -21,7 +21,7 @@ class TaskController extends Controller
         $boss_id = auth()->user()->boss_id;
         $responsible_people = null;
 
-        $all_my_task = $repository->get_tasks_by_desc($my_id);
+        $all_my_task = $repository->getTasksByDesc($my_id);
         $all_users = User::all();
 
         if (!isset($boss_id)) {
@@ -49,7 +49,7 @@ class TaskController extends Controller
         $responsible_people = null;
         $boss_id = auth()->user()->boss_id;
 
-        $all_task = $repository->get_tasks_by_desc($my_id);
+        $all_task = $repository->getTasksByDesc($my_id);
 
         $all_users = User::all();
 
@@ -61,13 +61,13 @@ class TaskController extends Controller
         $value = $req->input('filter');
         switch ($value) {
             case 'tasks_today' :
-                $all_task = $repository->get_tasks_today($my_id);
+                $all_task = $repository->getTasksToday($my_id);
                 break;
             case 'tasks_week':
-                $all_task = $repository->get_tasks_on_week($my_id);
+                $all_task = $repository->getTasksOnWeek($my_id);
                 break;
             case 'tasks_more_week':
-                $all_task = $repository->get_tasks_more_week($my_id);
+                $all_task = $repository->getTasksMoreWeek($my_id);
                 break;
 
             default:
@@ -100,7 +100,7 @@ class TaskController extends Controller
         $responsible_people = null;
         $boss_id = auth()->user()->boss_id;
 
-        $all_task = $repository->get_tasks_by_desc($my_id);
+        $all_task = $repository->getTasksByDesc($my_id);
 
 
         $all_users = User::all();
@@ -111,7 +111,7 @@ class TaskController extends Controller
 
 
         if (isset($responsible_id)) {
-            $all_task = $repository->get_tasks_responsible($my_id, $responsible_id);
+            $all_task = $repository->getTasksResponsible($my_id, $responsible_id);
         }
 
 
@@ -151,7 +151,7 @@ class TaskController extends Controller
      */
     public function change_task(TaskRepository $repository, Request $req)
     {
-        $task = $repository->find_by_id($req->id_course);
+        $task = $repository->findById($req->id_course);
         $task->title = $req->title ?? $task->title;
         $task->description = $req->description ?? $task->description;
         $task->date_end = $req->date_end ?? $task->date_end;

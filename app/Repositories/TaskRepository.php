@@ -13,7 +13,7 @@ class TaskRepository
      *
      * @return Task|\Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Builder[]|Collection|\Illuminate\Database\Eloquent\Model
      */
-    public function find_by_id($id): Task
+    public function findById($id): Task
     {
         return Task::query()->find($id);
     }
@@ -24,7 +24,7 @@ class TaskRepository
      *
      * @return \Illuminate\Database\Eloquent\Builder[]|Collection
      */
-    public function get_tasks_by_desc(int $user_id): Collection
+    public function getTasksByDesc(int $user_id): Collection
     {
         return Task::query()
             ->where('responsible_id', $user_id)
@@ -38,7 +38,7 @@ class TaskRepository
      *
      * @return \Illuminate\Database\Eloquent\Builder[]|Collection
      */
-    public function get_tasks_today(int $user_id): Collection
+    public function getTasksToday(int $user_id): Collection
     {
         $today = date('Y-m-d');
 
@@ -58,7 +58,7 @@ class TaskRepository
      *
      * @return \Illuminate\Database\Eloquent\Builder[]|Collection
      */
-    public function get_tasks_on_week(int $user_id): Collection
+    public function getTasksOnWeek(int $user_id): Collection
     {
         $today = date('Y-m-d');
         $date_week = date("Y-m-d", strtotime($today . '+ 7 days'));
@@ -78,7 +78,7 @@ class TaskRepository
      *
      * @return \Illuminate\Database\Eloquent\Builder[]|Collection
      */
-    public function get_tasks_more_week(int $user_id): Collection
+    public function getTasksMoreWeek(int $user_id): Collection
     {
         $today = date('Y-m-d');
         $date_week = date("Y-m-d", strtotime($today . '+ 7 days'));
@@ -99,7 +99,7 @@ class TaskRepository
      *
      * @return \Illuminate\Database\Eloquent\Builder[]|Collection
      */
-    public function get_tasks_responsible(int $user_id, int $responsible_id): Collection
+    public function getTasksResponsible(int $user_id, int $responsible_id): Collection
     {
         return Task::query()
             ->where(function ($query) use ($user_id, $responsible_id) {
